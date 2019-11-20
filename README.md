@@ -1,2 +1,2 @@
 # dinosaur
-A rpc  framework base on  Netty and Zookeeper
+A rpc  framework based on  Netty and Zookeeper
