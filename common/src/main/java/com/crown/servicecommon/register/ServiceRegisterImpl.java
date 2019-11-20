@@ -1,6 +1,7 @@
-package com.crown.servicecommon;
+package com.crown.servicecommon.register;
 
 
+import com.crown.servicecommon.Constant;
 import org.I0Itec.zkclient.ZkClient;
 
 import java.net.URLEncoder;
@@ -31,7 +32,7 @@ public class ServiceRegisterImpl implements ServiceRegister{
         if (!zkClient.exists(servicePath)){
             zkClient.createPersistent(servicePath);
         }
-        String nodePath = servicePath + URLEncoder.encode(serviceAddress) ;
+        String nodePath = servicePath +"/"+ URLEncoder.encode(serviceAddress) ;
         //创建我们呢的服务地址
         if (zkClient.exists(nodePath)){
             zkClient.delete(nodePath);
