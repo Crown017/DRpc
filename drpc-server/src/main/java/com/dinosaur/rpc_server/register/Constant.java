@@ -1,4 +1,4 @@
-package com.crown.servicecommon;
+package com.dinosaur.rpc_server.register;
 
 public class Constant {
     public  static final int ZK_TIMEOUT = 5000;
