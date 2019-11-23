@@ -18,7 +18,7 @@ public class DRpcServer {
     //Netty的配置
     private static String host = "127.0.0.1";
     private static Integer nport = 8899;
-    private static ConcurrentHashMap handleMap = new ConcurrentHashMap();
+    public static ConcurrentHashMap handleMap = new ConcurrentHashMap();
 
     public void start(Object service){
         try {
@@ -43,7 +43,7 @@ public class DRpcServer {
         String serviceName = dRpcService.value().getName();
         handleMap.put(serviceName,service);
         DRpcServiceRegister dRpcServiceRegister = new  ServiceRegisterImpl();
-        String address = "dinosaur" + "//" + host+":"+nport;
+        String address = "dinosaur:" + "//" + host+":"+nport;
         dRpcServiceRegister.register(serviceName,address, Constant.serviceType);
     }
 

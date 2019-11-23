@@ -1,12 +1,17 @@
 package com.drpc.client;
 
+import com.crown.servicecommon.decoder.MarshallingCodeCFactory;
 import com.crown.servicecommon.protocal.DRpcReponse;
 import com.crown.servicecommon.protocal.DrpcRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
 
@@ -25,25 +30,35 @@ public class DrpcClient {
      * @param host
      * @param port
      */
-    public void startNetty(String host,Integer port) throws Exception{
-        DRpcInitiaLizer initiaLizer = new DRpcInitiaLizer();
+    public Object startNetty(String host,Integer port) throws Exception{
+        Object dRpcReponse =  null;
+        DRpcClientHandler handler =  new DRpcClientHandler();
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(eventLoopGroup)
-                    .channel(NioServerSocketChannel.class)
+                    .channel(NioSocketChannel.class)
                     .remoteAddress(new InetSocketAddress(host,port))
-                    .handler(initiaLizer);
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            ChannelPipeline channelPipeline =  socketChannel.pipeline();
+
+                            channelPipeline.addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
+                            channelPipeline.addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
+                            channelPipeline.addLast(handler);
+                        }
+                    });
             ChannelFuture channelFuture = bootstrap.connect().sync();
             channelFuture.channel().writeAndFlush(drpcRequest);
-            this.dRpcReponse = initiaLizer.getdRpcReponse();
             channelFuture.channel().closeFuture().sync();
         }catch (Exception e){
             e.printStackTrace();
 
         }finally {
-            eventLoopGroup.shutdownGracefully().sync();
+            eventLoopGroup.shutdownGracefully();
         }
+        return handler.getdRpcReponse().getData();
     }
 
 

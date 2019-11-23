@@ -1,21 +1,14 @@
 package com.dinosaur.rpc_server.server;
 
 
+import com.crown.servicecommon.protocal.DRpcReponse;
 import com.crown.servicecommon.protocal.DrpcRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 
 public class DRpcServerReqHandler extends ChannelInboundHandlerAdapter {
-
-
-    private Map<String,Object> handleMap;
-
-    public DRpcServerReqHandler(Map<String, Object> handleMap) {
-        this.handleMap = handleMap;
-    }
 
     public DRpcServerReqHandler() {
     }
@@ -28,6 +21,7 @@ public class DRpcServerReqHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println("开始接受客户端的请求-------------------");
         Object object= null;
         DrpcRequest drpcRequest = null;
         if (msg instanceof DrpcRequest){
@@ -35,9 +29,10 @@ public class DRpcServerReqHandler extends ChannelInboundHandlerAdapter {
         }
         String serviceName = drpcRequest.getServiceName();
         String methodName = drpcRequest.getMethodName();
-        Object classType = handleMap.get(serviceName);
+        Object classType = DRpcServer.handleMap.get(serviceName);
         Method method =  classType.getClass().getMethod(methodName,drpcRequest.getParameterTypes());
         object = method.invoke(classType,drpcRequest.getParamsValue());
-        ctx.writeAndFlush(object);
+        DRpcReponse<String>  dRpcReponse = new DRpcReponse<>(1,object.toString());
+        ctx.writeAndFlush(dRpcReponse);
     }
 }

@@ -11,11 +11,15 @@ public class DRpcClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println("客户端接受到相应----------");
+
+
+        System.out.println("msg : " + msg);
         if (msg instanceof  DRpcReponse){
             DRpcReponse<String> dRpcReponse = (DRpcReponse<String>) msg;
-            System.out.println("客户端接受到相应");
-            this.dRpcReponse = dRpcReponse ;
+            this.dRpcReponse = dRpcReponse;
         }
+        ctx.close();
     }
 
 

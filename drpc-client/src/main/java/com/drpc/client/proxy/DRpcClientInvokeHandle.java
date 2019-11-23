@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 
 
 public class DRpcClientInvokeHandle<T> implements InvocationHandler {
@@ -24,7 +25,7 @@ public class DRpcClientInvokeHandle<T> implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         DRpcDiscover discover = new DRpcDiscoverImpl();
         String serviceName = interfaces.getName();
-        String servicePath  = discover.serviceDiscover(serviceName);
+        String servicePath  = URLDecoder.decode(discover.serviceDiscover(serviceName));
         if (StringUtils.isEmpty(servicePath)){
             throw new Exception("no service find exception");
         }
@@ -33,7 +34,6 @@ public class DRpcClientInvokeHandle<T> implements InvocationHandler {
         String port = paths[2];
         DrpcRequest drpcRequest = new DrpcRequest(serviceName,method.getName(),method.getParameterTypes(),args);
         DrpcClient drpcClient = new DrpcClient(drpcRequest);
-        drpcClient.startNetty(host,Integer.parseInt(port));
-        return drpcClient.getdRpcReponse().getData();
+        return drpcClient.startNetty(host,Integer.parseInt(port));
     }
 }
