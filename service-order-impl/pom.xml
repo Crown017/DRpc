@@ -11,5 +11,21 @@
 
     <artifactId>service-order-impl</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.crown</groupId>
+            <artifactId>drpc-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.crown</groupId>
+            <artifactId>drpc-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.crown</groupId>
+            <artifactId>service-member-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

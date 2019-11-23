@@ -5,6 +5,7 @@ import com.crown.servicecommon.Constant;
 import com.dinosaur.rpc_server.register.DRpcServiceRegister;
 import com.dinosaur.rpc_server.register.ServiceRegisterImpl;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -19,9 +20,14 @@ public class DRpcServer {
     private static Integer nport = 8899;
     private static ConcurrentHashMap handleMap = new ConcurrentHashMap();
 
-    public void start(){
-//        bind();
-        nettyServerStartUp();
+    public void start(Object service){
+        try {
+            bind(service);
+            nettyServerStartUp();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     //服务的注册
@@ -29,11 +35,13 @@ public class DRpcServer {
         if (service == null){
             throw new Exception("服务为null");
         }
-        DRpcService  dRpcService = service.getClass().getAnnotation(DRpcService.class);
+        DRpcService  dRpcService = service.getClass().getDeclaredAnnotation(DRpcService.class);
         if (dRpcService == null){
             throw new Exception("No annotation of:" + DRpcService.class.getName());
         }
+
         String serviceName = dRpcService.value().getName();
+        handleMap.put(serviceName,service);
         DRpcServiceRegister dRpcServiceRegister = new  ServiceRegisterImpl();
         String address = "dinosaur" + "//" + host+":"+nport;
         dRpcServiceRegister.register(serviceName,address, Constant.serviceType);
@@ -49,7 +57,8 @@ public class DRpcServer {
                 .childHandler(new DRpcServerInitlializer());
 
         try {
-            serverBootstrap.bind().sync();
+            ChannelFuture  channelFuture = serverBootstrap.bind().sync();
+            channelFuture.channel().closeFuture().sync();
         }catch (Exception e){
 
         }finally {

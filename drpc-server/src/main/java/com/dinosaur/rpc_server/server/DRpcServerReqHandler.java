@@ -37,7 +37,7 @@ public class DRpcServerReqHandler extends ChannelInboundHandlerAdapter {
         String methodName = drpcRequest.getMethodName();
         Object classType = handleMap.get(serviceName);
         Method method =  classType.getClass().getMethod(methodName,drpcRequest.getParameterTypes());
-        object = method.invoke(classType,drpcRequest.getParameterTypes());
+        object = method.invoke(classType,drpcRequest.getParamsValue());
         ctx.writeAndFlush(object);
     }
 }

@@ -34,6 +34,6 @@ public class DRpcClientInvokeHandle<T> implements InvocationHandler {
         DrpcRequest drpcRequest = new DrpcRequest(serviceName,method.getName(),method.getParameterTypes(),args);
         DrpcClient drpcClient = new DrpcClient(drpcRequest);
         drpcClient.startNetty(host,Integer.parseInt(port));
-        return drpcClient.getdRpcReponse();
+        return drpcClient.getdRpcReponse().getData();
     }
 }

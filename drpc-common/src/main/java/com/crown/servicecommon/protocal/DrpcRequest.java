@@ -39,6 +39,15 @@ public class DrpcRequest  implements Serializable {
         this.parameterTypes = parameterTypes;
     }
 
+
+    public Class<?>[] getParameterTypes() {
+        return parameterTypes;
+    }
+
+    public void setParameterTypes(Class<?>[] parameterTypes) {
+        this.parameterTypes = parameterTypes;
+    }
+
     public Object[] getParamsValue() {
         return paramsValue;
     }
