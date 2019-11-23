@@ -7,9 +7,15 @@
         <groupId>com.crown</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>common</artifactId>
 
+    <artifactId>drpc-client</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.crown</groupId>
+            <artifactId>drpc-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

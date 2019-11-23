@@ -2,11 +2,12 @@ package com.dinosaur.rpc_server.register;
 
 
 
+import com.crown.servicecommon.Constant;
 import org.I0Itec.zkclient.ZkClient;
 
 import java.net.URLEncoder;
 
-public class ServiceRegisterImpl implements ServiceRegister{
+public class ServiceRegisterImpl implements DRpcServiceRegister {
 
     private ZkClient zkClient = null;
 
@@ -33,7 +34,7 @@ public class ServiceRegisterImpl implements ServiceRegister{
             zkClient.createPersistent(servicePath);
         }
         String nodePath = servicePath +"/"+ URLEncoder.encode(serviceAddress) ;
-        //创建我们呢的服务地址
+        //创建我们的服务地址
         if (zkClient.exists(nodePath)){
             zkClient.delete(nodePath);
         }

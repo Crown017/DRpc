@@ -1,5 +1,5 @@
 package com.dinosaur.rpc_server.register;
 
-public interface ServiceRegister {
+public interface DRpcServiceRegister {
     void register(String serviceName,String serviceAddress,String serviceDataPath);
 }
