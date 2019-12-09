@@ -16,8 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DRpcServer {
 
     //Netty的配置
-    private static String host = "127.0.0.1";
-    private static Integer nport = 8899;
+    private final static String host = "127.0.0.1";
+    private final static Integer nport = 8899;
+
+    /**
+     * Handle本地容器缓存
+     */
     public static ConcurrentHashMap handleMap = new ConcurrentHashMap();
 
     public void start(Object service){
@@ -30,7 +34,11 @@ public class DRpcServer {
 
     }
 
-    //服务的注册
+    /**
+     * 服务的注册
+     *
+     * 注册一个服务到注册中心上去，并在本地创建缓存。
+     */
     public void bind(Object service) throws  Exception{
         if (service == null){
             throw new Exception("服务为null");
@@ -47,14 +55,18 @@ public class DRpcServer {
         dRpcServiceRegister.register(serviceName,address, Constant.serviceType);
     }
 
-    //
+    /**
+     * Netty 服务器端
+     *
+     * RpcServer端程序
+     */
     public void nettyServerStartUp(){
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workGroup = new NioEventLoopGroup(4);
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup,workGroup).channel(NioServerSocketChannel.class)
                 .localAddress(new InetSocketAddress(nport))
-                .childHandler(new DRpcServerInitlializer());
+                .childHandler(new DRpcServerInitializer());
 
         try {
             ChannelFuture  channelFuture = serverBootstrap.bind().sync();

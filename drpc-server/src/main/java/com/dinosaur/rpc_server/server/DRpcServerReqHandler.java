@@ -27,6 +27,9 @@ public class DRpcServerReqHandler extends ChannelInboundHandlerAdapter {
         if (msg instanceof DrpcRequest){
              drpcRequest = (DrpcRequest)msg;
         }
+        /**
+         * 根据传输的信息通过反射调用
+         */
         String serviceName = drpcRequest.getServiceName();
         String methodName = drpcRequest.getMethodName();
         Object classType = DRpcServer.handleMap.get(serviceName);

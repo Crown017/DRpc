@@ -2,14 +2,34 @@ package com.crown.servicecommon.protocal;
 
 import java.io.Serializable;
 
+
+/**
+ * DRpc的请求
+ *
+ * 请求的一个抽象，实现序列化接口，Mashalling需要实现Serializable接口
+ */
 public class DrpcRequest  implements Serializable {
 
-    private static final  long serialVersionUID = 1L;
-
-
+    private static final  long serialVersionUID = 6921944834434545047L;
+    /**
+     * 要调用的服务的名称
+     *
+     * 例如：com.crown.dmember.MemberService，以便从HandlerMap中获取
+     */
     private String serviceName;
+    /**
+     * 调用的该接口的哪个方法名称
+     * 提供给反射api调用
+     */
     private String methodName;
+    /**
+     * 方法的形式参数
+     */
     private Class<?>[] parameterTypes;
+
+    /**
+     * 方法的实参
+     */
     private Object[] paramsValue;
 
     public DrpcRequest(String serviceName, String methodName, Class<?>[] parameterTypes, Object[] paramsValue) {

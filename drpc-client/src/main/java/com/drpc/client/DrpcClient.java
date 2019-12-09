@@ -15,6 +15,12 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
 
+/**
+ * Netty 客户端
+ *
+ *
+ * 服务调用端
+ */
 public class DrpcClient {
 
     private DrpcRequest drpcRequest;
@@ -50,6 +56,10 @@ public class DrpcClient {
                         }
                     });
             ChannelFuture channelFuture = bootstrap.connect().sync();
+            /**
+             * 将请求封装成一个Request对象
+             * 写入到channel当中
+             */
             channelFuture.channel().writeAndFlush(drpcRequest);
             channelFuture.channel().closeFuture().sync();
         }catch (Exception e){
