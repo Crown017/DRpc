@@ -33,6 +33,16 @@ public class DrpcClient {
 
     /**
      * 连接到服务起端
+     *
+     *
+     * 注意：MarshallingDecoder 继承了 LengthFieldBasedFrameDecoder
+     *     根据Netty内置的处理粘包，拆包的一种策略。使用报文头+报文体协议。
+     *
+     *     MarshallingEncoder继承了 MessageToByteEncoder 出站的都是将一个
+     *     原有的类型转换成ByteBuf
+     *
+     * 鉴于此：我们只要使用了MarshallingDecoder 就可以解决TCP粘包拆包的问题。
+     *
      * @param host
      * @param port
      */
