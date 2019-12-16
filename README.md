@@ -8,3 +8,8 @@ A rpc  framework based on  Netty and Zookeeper
 - 版本灰度
 - 扩展性
 - 集群
+
+
+### 未来将提供
+- 自定义协议+Json序列化
+- 基于Protobuf的序列化
