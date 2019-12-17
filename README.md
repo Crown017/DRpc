@@ -7,7 +7,7 @@ A rpc  framework based on  Netty and Zookeeper
 ### 自定义协议
 
 
-- magic 魔树
+- magic 魔数
 - heartbeat是否是心跳的包
 - mType协议的类型 响应还是请求
 - status状态
