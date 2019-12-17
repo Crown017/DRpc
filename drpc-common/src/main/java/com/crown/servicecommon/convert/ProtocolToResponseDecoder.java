@@ -8,7 +8,7 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class ProtocalToResponseDecoder extends MessageToMessageDecoder<DRpcProtocol> {
+public class ProtocolToResponseDecoder extends MessageToMessageDecoder<DRpcProtocol> {
     @Override
     protected void decode(ChannelHandlerContext ctx, DRpcProtocol msg, List<Object> out) throws Exception {
         byte[] content = msg.getContent();
