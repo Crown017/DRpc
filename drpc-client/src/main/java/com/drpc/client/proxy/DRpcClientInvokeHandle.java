@@ -2,7 +2,7 @@ package com.drpc.client.proxy;
 
 import com.crown.servicecommon.discover.DRpcDiscover;
 import com.crown.servicecommon.discover.DRpcDiscoverImpl;
-import com.crown.servicecommon.protocal.DrpcRequest;
+import com.crown.servicecommon.protocol.DrpcRequest;
 import com.drpc.client.DrpcClient;
 import org.springframework.util.StringUtils;
 
@@ -37,7 +37,7 @@ public class DRpcClientInvokeHandle<T> implements InvocationHandler {
          */
         String host = paths[1].replaceAll("//","");
         String port = paths[2];
-        DrpcRequest drpcRequest = new DrpcRequest(serviceName,method.getName(),method.getParameterTypes(),args);
+        DrpcRequest drpcRequest = new DrpcRequest(serviceName,method.getName(),method.getParameterTypes(),method.getReturnType(),args);
         DrpcClient drpcClient = new DrpcClient(drpcRequest);
         return drpcClient.startNetty(host,Integer.parseInt(port));
     }

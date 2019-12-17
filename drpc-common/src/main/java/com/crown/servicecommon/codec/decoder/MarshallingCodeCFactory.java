@@ -1,4 +1,4 @@
-package com.crown.servicecommon.decoder;
+package com.crown.servicecommon.codec.decoder;
 
 import io.netty.handler.codec.marshalling.*;
 import org.jboss.marshalling.MarshallerFactory;

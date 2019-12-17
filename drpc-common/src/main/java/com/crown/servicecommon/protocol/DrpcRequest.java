@@ -1,4 +1,4 @@
-package com.crown.servicecommon.protocal;
+package com.crown.servicecommon.protocol;
 
 import java.io.Serializable;
 
@@ -28,14 +28,24 @@ public class DrpcRequest  implements Serializable {
     private Class<?>[] parameterTypes;
 
     /**
+     * 参数的返回类型
+     */
+    private Class<?> returnType;
+
+    /**
      * 方法的实参
      */
     private Object[] paramsValue;
 
-    public DrpcRequest(String serviceName, String methodName, Class<?>[] parameterTypes, Object[] paramsValue) {
+
+    public DrpcRequest() {
+    }
+
+    public DrpcRequest(String serviceName, String methodName, Class<?>[] parameterTypes, Class<?> returnType, Object[] paramsValue) {
         this.serviceName = serviceName;
         this.methodName = methodName;
         this.parameterTypes = parameterTypes;
+        this.returnType = returnType;
         this.paramsValue = paramsValue;
     }
 
@@ -74,5 +84,13 @@ public class DrpcRequest  implements Serializable {
 
     public void setParamsValue(Object[] paramsValue) {
         this.paramsValue = paramsValue;
+    }
+
+    public Class<?> getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(Class<?> returnType) {
+        this.returnType = returnType;
     }
 }
