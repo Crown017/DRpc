@@ -1,14 +1,19 @@
 package com.dinosaur.rpc_server.server;
 
 
-import com.crown.servicecommon.protocal.DRpcReponse;
-import com.crown.servicecommon.protocal.DrpcRequest;
+import com.crown.servicecommon.codec.ProtocolConstant;
+import com.crown.servicecommon.protocol.DRpcResponse;
+import com.crown.servicecommon.protocol.DrpcRequest;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
 
-public class DRpcServerReqHandler extends ChannelInboundHandlerAdapter {
+public class DRpcServerReqHandler extends SimpleChannelInboundHandler<DrpcRequest> {
+
+    private Logger logger = LogManager.getLogger(DRpcServerReqHandler.class);
 
     public DRpcServerReqHandler() {
     }
@@ -16,23 +21,22 @@ public class DRpcServerReqHandler extends ChannelInboundHandlerAdapter {
     /**
      * 处理客户端发过来的请求
      * @param ctx
-     * @param msg
      * @throws Exception
      */
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("开始接受客户端的请求-------------------");
-        Object object= null;
-        DrpcRequest drpcRequest = null;
-        if (msg instanceof DrpcRequest){
-             drpcRequest = (DrpcRequest)msg;
-        }
+    public void channelRead0(ChannelHandlerContext ctx, DrpcRequest drpcRequest) throws Exception {
+        logger.info("开始接受客户端的请求-------------------");
+
+        /**
+         * 根据传输的信息通过反射调用
+         */
         String serviceName = drpcRequest.getServiceName();
         String methodName = drpcRequest.getMethodName();
         Object classType = DRpcServer.handleMap.get(serviceName);
         Method method =  classType.getClass().getMethod(methodName,drpcRequest.getParameterTypes());
-        object = method.invoke(classType,drpcRequest.getParamsValue());
-        DRpcReponse<String>  dRpcReponse = new DRpcReponse<>(1,object.toString());
-        ctx.writeAndFlush(dRpcReponse);
+        Object object = method.invoke(classType,drpcRequest.getParamsValue());
+        DRpcResponse dRpcResponse = new DRpcResponse(ProtocolConstant.P_STATUS_OK,object);
+        logger.info("服务端处理完请求:"+dRpcResponse);
+        ctx.writeAndFlush(dRpcResponse);
     }
 }

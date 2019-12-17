@@ -1,8 +1,7 @@
 package com.crown.dmember;
 
-import com.crown.servicecommon.annotaion.DRpcService;
-
+import com.crown.servicecommon.domain.UserInfo;
 
 public interface MemberService {
-    String getUser(Long id);
+    UserInfo getUser(Long id);
 }
