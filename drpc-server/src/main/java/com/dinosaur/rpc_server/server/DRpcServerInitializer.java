@@ -4,7 +4,6 @@ import com.crown.servicecommon.decoder.MarshallingCodeCFactory;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.json.JsonObjectDecoder;
 
 /**
  * @author clown
@@ -15,7 +14,6 @@ public class DRpcServerInitializer extends ChannelInitializer<SocketChannel> {
 
     protected void initChannel(SocketChannel socketChannel) throws Exception {
        ChannelPipeline pipeline =  socketChannel.pipeline();
-       pipeline.addLast(new JsonObjectDecoder());
         /**
          * 添加基于XML的编解码器
          */
