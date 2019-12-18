@@ -6,7 +6,7 @@ A rpc  framework based on  Netty and Zookeeper
 
 
 ### 自定义协议
-
+branch protocol
 
 - magic 魔数
 - heartbeat是否是心跳的包
@@ -14,6 +14,8 @@ A rpc  framework based on  Netty and Zookeeper
 - status状态
 - length协议报文长度
 - 报文体
+
+
 
 ```
 +----------+-----------+--------+--------+--------------+---------------------------------------------------------------+
