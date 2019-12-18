@@ -6,6 +6,6 @@ import com.dinosaur.rpc_server.server.DRpcServer;
 public class DRpcServerTest {
     public static void main(String[] args) {
         DRpcServer dRpcServer =  new DRpcServer();
-        dRpcServer.start(new MemberServiceImpl());
+        dRpcServer.publish(new MemberServiceImpl());
     }
 }

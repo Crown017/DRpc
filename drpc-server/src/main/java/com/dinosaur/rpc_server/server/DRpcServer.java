@@ -24,7 +24,7 @@ public class DRpcServer {
      */
     public static ConcurrentHashMap handleMap = new ConcurrentHashMap();
 
-    public void start(Object service){
+    public void publish(Object service){
         try {
             bind(service);
             nettyServerStartUp();
