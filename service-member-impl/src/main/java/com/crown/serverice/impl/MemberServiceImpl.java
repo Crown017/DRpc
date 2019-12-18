@@ -8,9 +8,9 @@ import java.util.UUID;
 
 @DRpcService(MemberService.class)
 public class MemberServiceImpl implements MemberService {
-    public UserInfo getUser(Long id) {
+    public UserInfo getUser(int id) {
         String token = UUID.randomUUID().toString();
-        UserInfo userInfo = new UserInfo(id,"张三",token);
+        UserInfo userInfo = new UserInfo(id,"zhangsan",token);
         return userInfo;
     }
 }

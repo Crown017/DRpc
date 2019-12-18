@@ -5,8 +5,11 @@ import com.crown.servicecommon.protocol.DRpcProtocol;
 import com.crown.servicecommon.protocol.DRpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import org.apache.log4j.LogManager;
 
+import java.nio.charset.Charset;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -15,16 +18,18 @@ import java.util.List;
  */
 public class ResponseToProtocolEncoder extends MessageToMessageEncoder<DRpcResponse> {
 
+    private static Logger logger = LogManager.getLogger(ResponseToProtocolEncoder.class);
+
     @Override
     protected void encode(ChannelHandlerContext ctx, DRpcResponse msg, List<Object> out) throws Exception {
 
+        logger.info("把DRpcResponse 转换成一个 DRpcProtocol");
 
-
-        Object data = msg.getData();
-        String json = FastJsonUtil.bean2Json(data);
+//        Object data = msg.getData();
+        String json = FastJsonUtil.bean2Json(msg);
 
         int length = json.length();
-        byte[] content = json.getBytes();
+        byte[] content = json.getBytes(Charset.forName("utf-8"));
 
 
         DRpcProtocol protocol = new DRpcProtocol();
@@ -35,5 +40,7 @@ public class ResponseToProtocolEncoder extends MessageToMessageEncoder<DRpcRespo
 
         protocol.setLength(length);
         protocol.setContent(content);
+
+        out.add(protocol);
     }
 }

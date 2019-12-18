@@ -34,8 +34,9 @@ public class DRpcServerReqHandler extends SimpleChannelInboundHandler<DrpcReques
         String methodName = drpcRequest.getMethodName();
         Object classType = DRpcServer.handleMap.get(serviceName);
         Method method =  classType.getClass().getMethod(methodName,drpcRequest.getParameterTypes());
-        Object object = method.invoke(classType,drpcRequest.getParamsValue());
-        DRpcResponse dRpcResponse = new DRpcResponse(ProtocolConstant.P_STATUS_OK,object);
+        Object[] paramsValue = drpcRequest.getParamsValue();
+        Object object = method.invoke(classType,paramsValue);
+        DRpcResponse dRpcResponse = new DRpcResponse(ProtocolConstant.P_STATUS_OK,object,drpcRequest.getReturnType().getName());
         logger.info("服务端处理完请求:"+dRpcResponse);
         ctx.writeAndFlush(dRpcResponse);
     }

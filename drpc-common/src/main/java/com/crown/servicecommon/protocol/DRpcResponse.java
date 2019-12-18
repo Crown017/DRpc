@@ -11,10 +11,24 @@ public class DRpcResponse implements Serializable {
     private Integer status;
     //数据类型 如果没有实现Serializable请实现Serializable接口
     private Object data;
+    //returnTypeName
+    private String resultTypeName;
 
-    public DRpcResponse(Integer status, Object data) {
+    public String getResultTypeName() {
+        return resultTypeName;
+    }
+
+    public void setResultTypeName(String resultTypeName) {
+        this.resultTypeName = resultTypeName;
+    }
+
+    public DRpcResponse(Integer status, Object data, String resultTypeName) {
         this.status = status;
         this.data = data;
+        this.resultTypeName = resultTypeName;
+    }
+
+    public DRpcResponse() {
     }
 
     public Integer getStatus() {

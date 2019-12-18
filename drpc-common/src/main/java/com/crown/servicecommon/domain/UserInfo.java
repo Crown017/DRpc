@@ -1,23 +1,23 @@
 package com.crown.servicecommon.domain;
 
 public class UserInfo {
-    private Long userId;
+    private Integer userId;
 
     private String userName;
 
     private String token;
 
-    public UserInfo(Long userId, String userName, String token) {
+    public UserInfo(Integer userId, String userName, String token) {
         this.userId = userId;
         this.userName = userName;
         this.token = token;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -35,5 +35,14 @@ public class UserInfo {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", token='" + token + '\'' +
+                '}';
     }
 }

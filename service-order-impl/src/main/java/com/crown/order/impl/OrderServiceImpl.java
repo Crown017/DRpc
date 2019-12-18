@@ -7,7 +7,7 @@ import com.drpc.client.proxy.DRpcClintProxy;
 public class OrderServiceImpl {
     public static void main(String[] args) {
         MemberService memberService = DRpcClintProxy.create(MemberService.class);
-        UserInfo string  =  memberService.getUser(1L);
+        UserInfo string  =  memberService.getUser(1);
         System.out.println(string);
     }
 }

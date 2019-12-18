@@ -8,6 +8,7 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 
@@ -21,7 +22,7 @@ public class RequestToProtocolEnCoder extends MessageToMessageEncoder<DrpcReques
         logger.info("把编码请求编码成一个DRpcProtocol");
         String json = FastJsonUtil.bean2Json(msg);
         int length = json.length();
-        byte[] content = json.getBytes();
+        byte[] content = json.getBytes(Charset.forName("utf-8"));
 
         DRpcProtocol protocol = new DRpcProtocol();
         protocol.setMagic(ProtocolConstant.MAGIC_NUM);

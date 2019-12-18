@@ -62,10 +62,11 @@ public class DrpcClient {
                             channelPipeline.addLast(new DRpcProtocolDecoder());
                             //把协议转换成方便处理的DRpcRequest对象
                             channelPipeline.addLast(new ProtocolToResponseDecoder());
-                            // 把处理完的响应编码成协议
-                            channelPipeline.addLast(new RequestToProtocolEnCoder());
+
                             // 把协议写到ByteBuf发送到服务端
                             channelPipeline.addLast(new DRpcProtocolEncoder());
+                            // 把处理完的响应编码成协议
+                            channelPipeline.addLast(new RequestToProtocolEnCoder());
                             channelPipeline.addLast(handler);
                         }
                     });

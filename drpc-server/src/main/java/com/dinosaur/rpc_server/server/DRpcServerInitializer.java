@@ -18,25 +18,21 @@ public class DRpcServerInitializer extends ChannelInitializer<SocketChannel> {
 
     protected void initChannel(SocketChannel socketChannel) throws Exception {
        ChannelPipeline pipeline =  socketChannel.pipeline();
-        /**
-         * 添加基于XML的编解码器
-         */
-       pipeline.addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
-       pipeline.addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 //        /**
 //         * 添加基于XML的编解码器
 //         */
 //       pipeline.addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
 //       pipeline.addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 //
-//       //入栈的时候解码为DRpc协议
-//       pipeline.addLast(new DRpcProtocolDecoder());
-//       //出站的时候转换成DRpc协议
-//       pipeline.addLast(new ResponseToProtocolEncoder());
-//       //把DRpc协议转化成Request
-//       pipeline.addLast(new ProtocalToRequestDecoder());
-//       //DRpc协议写到ByteBuf中
-//       pipeline.addLast(new DRpcProtocolEncoder());
+       //入栈的时候解码为DRpc协议
+       pipeline.addLast(new DRpcProtocolDecoder());
+
+       //把DRpc协议转化成Request
+       pipeline.addLast(new ProtocalToRequestDecoder());
+       //DRpc协议写到ByteBuf中
+       pipeline.addLast(new DRpcProtocolEncoder());
+       //出站的时候转换成DRpc协议
+        pipeline.addLast(new ResponseToProtocolEncoder());
 
 
         /**
