@@ -1,8 +1,10 @@
 package com.drpc.client;
 
-import com.crown.servicecommon.decoder.MarshallingCodeCFactory;
-import com.crown.servicecommon.protocal.DRpcReponse;
-import com.crown.servicecommon.protocal.DrpcRequest;
+import com.crown.servicecommon.codec.protocol.DRpcProtocolDecoder;
+import com.crown.servicecommon.codec.protocol.DRpcProtocolEncoder;
+import com.crown.servicecommon.convert.ProtocolToResponseDecoder;
+import com.crown.servicecommon.convert.RequestToProtocolEnCoder;
+import com.crown.servicecommon.protocol.DrpcRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -10,7 +12,6 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
@@ -24,8 +25,6 @@ import java.net.InetSocketAddress;
 public class DrpcClient {
 
     private DrpcRequest drpcRequest;
-
-    private DRpcReponse dRpcReponse;
 
     public DrpcClient(DrpcRequest drpcRequest) {
         this.drpcRequest = drpcRequest;
@@ -47,8 +46,8 @@ public class DrpcClient {
      * @param port
      */
     public Object startNetty(String host,Integer port) throws Exception{
-        Object dRpcReponse =  null;
         DRpcClientHandler handler =  new DRpcClientHandler();
+        handler.setDrpcRequest(drpcRequest);
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         try {
             Bootstrap bootstrap = new Bootstrap();
@@ -59,9 +58,14 @@ public class DrpcClient {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline channelPipeline =  socketChannel.pipeline();
-
-                            channelPipeline.addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
-                            channelPipeline.addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
+                            //从ByteBuf中解码出定义的协议
+                            channelPipeline.addLast(new DRpcProtocolDecoder());
+                            //把协议转换成方便处理的DRpcRequest对象
+                            channelPipeline.addLast(new ProtocolToResponseDecoder());
+                            // 把处理完的响应编码成协议
+                            channelPipeline.addLast(new RequestToProtocolEnCoder());
+                            // 把协议写到ByteBuf发送到服务端
+                            channelPipeline.addLast(new DRpcProtocolEncoder());
                             channelPipeline.addLast(handler);
                         }
                     });
@@ -70,7 +74,7 @@ public class DrpcClient {
              * 将请求封装成一个Request对象
              * 写入到channel当中
              */
-            channelFuture.channel().writeAndFlush(drpcRequest);
+//            channelFuture.channel().writeAndFlush(drpcRequest);
             channelFuture.channel().closeFuture().sync();
         }catch (Exception e){
             e.printStackTrace();
@@ -78,7 +82,7 @@ public class DrpcClient {
         }finally {
             eventLoopGroup.shutdownGracefully();
         }
-        return handler.getdRpcReponse().getData();
+        return handler.getdRpcResponse().getData();
     }
 
 
@@ -90,11 +94,4 @@ public class DrpcClient {
         this.drpcRequest = drpcRequest;
     }
 
-    public DRpcReponse getdRpcReponse() {
-        return dRpcReponse;
-    }
-
-    public void setdRpcReponse(DRpcReponse dRpcReponse) {
-        this.dRpcReponse = dRpcReponse;
-    }
 }

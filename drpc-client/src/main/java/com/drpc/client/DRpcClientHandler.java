@@ -1,33 +1,49 @@
 package com.drpc.client;
 
 
-import com.crown.servicecommon.protocal.DRpcReponse;
+import com.crown.servicecommon.protocol.DRpcResponse;
+import com.crown.servicecommon.protocol.DrpcRequest;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
-public class DRpcClientHandler extends ChannelInboundHandlerAdapter {
 
-    private DRpcReponse<String> dRpcReponse;
+public class DRpcClientHandler extends SimpleChannelInboundHandler<DRpcResponse> {
+
+    private  static Logger logger = LogManager.getLogger(DRpcClientHandler.class);
+
+    private DRpcResponse dRpcResponse;
+    private DrpcRequest drpcRequest;
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("客户端接受到相应----------");
+    public void channelRead0(ChannelHandlerContext ctx, DRpcResponse dRpcResponse) throws Exception {
+        logger.info("客户端接受到相应----------");
+        logger.info("msg : " + dRpcResponse);
 
-
-        System.out.println("msg : " + msg);
-        if (msg instanceof  DRpcReponse){
-            DRpcReponse<String> dRpcReponse = (DRpcReponse<String>) msg;
-            this.dRpcReponse = dRpcReponse;
-        }
+        this.dRpcResponse = dRpcResponse;
         ctx.close();
     }
 
-
-    public DRpcReponse<String> getdRpcReponse() {
-        return dRpcReponse;
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("客户端发送请求"+ drpcRequest.getServiceName() );
+        ctx.writeAndFlush(drpcRequest);
     }
 
-    public void setdRpcReponse(DRpcReponse<String> dRpcReponse) {
-        this.dRpcReponse = dRpcReponse;
+    public DRpcResponse getdRpcResponse() {
+        return dRpcResponse;
+    }
+
+    public void setdRpcResponse(DRpcResponse dRpcResponse) {
+        this.dRpcResponse = dRpcResponse;
+    }
+
+    public DrpcRequest getDrpcRequest() {
+        return drpcRequest;
+    }
+
+    public void setDrpcRequest(DrpcRequest drpcRequest) {
+        this.drpcRequest = drpcRequest;
     }
 }

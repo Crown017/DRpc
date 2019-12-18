@@ -1,24 +1,21 @@
-package com.crown.servicecommon.protocal;
+package com.crown.servicecommon.protocol;
 
 import java.io.Serializable;
 
 /**
  * 响应对象
  *
- * @param <T> 响应体泛型
  */
-public class DRpcReponse<T> implements Serializable {
+public class DRpcResponse implements Serializable {
     //状态码
     private Integer status;
     //数据类型 如果没有实现Serializable请实现Serializable接口
-    private T data;
+    private Object data;
 
-    public DRpcReponse(Integer status, T data) {
+    public DRpcResponse(Integer status, Object data) {
         this.status = status;
         this.data = data;
     }
-
-
 
     public Integer getStatus() {
         return status;
@@ -28,11 +25,11 @@ public class DRpcReponse<T> implements Serializable {
         this.status = status;
     }
 
-    public T getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }
